@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { CartItem } from "@/types/store";
 
 interface OrderSummaryProps {
@@ -30,16 +31,52 @@ export function OrderSummary({ items }: OrderSummaryProps) {
             const productName = item.variant?.product?.name ?? "Product";
             const size = item.variant?.size ?? "";
             const color = item.variant?.color ?? "";
+            const firstImage = item.variant?.product?.images?.[0]?.url ?? null;
 
             return (
-              <li key={item.id} className="flex items-start justify-between gap-4 py-3">
+              <li key={item.id} className="flex items-start gap-3 py-3">
+                {/* Product Image */}
+                <div style={{
+                  position: 'relative',
+                  width: '60px',
+                  height: '60px',
+                  backgroundColor: '#f3f4f6',
+                  borderRadius: '6px',
+                  border: '1px solid #e5e7eb',
+                  overflow: 'hidden',
+                  flexShrink: 0
+                }}>
+                  {firstImage ? (
+                    <Image
+                      src={firstImage}
+                      alt={productName}
+                      fill
+                      sizes="60px"
+                      style={{ objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div style={{
+                      display: 'flex',
+                      height: '100%',
+                      width: '100%',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '10px',
+                      color: '#9ca3af'
+                    }}>
+                      No image
+                    </div>
+                  )}
+                </div>
+
+                {/* Product Details */}
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{productName}</p>
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-xs mt-1">
                     {size} / {color} &times; {item.quantity}
                   </p>
+                  <span className="text-sm font-medium mt-1 block">{formatPrice(lineTotal)}</span>
                 </div>
-                <span className="shrink-0 text-sm font-medium">{formatPrice(lineTotal)}</span>
               </li>
             );
           })}

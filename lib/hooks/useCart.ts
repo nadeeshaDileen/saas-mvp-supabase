@@ -149,8 +149,13 @@ export function useAddToCart() {
       const currentQty = (existing?.quantity as number) ?? 0;
       const newQty = Math.min(currentQty + quantity, availableStock);
 
+      if (!session?.user?.id) {
+        throw new Error("User not authenticated");
+      }
+
       const { error } = await supabase.from("cart_items").upsert(
         {
+          user_id: session.user.id,
           variant_id: variantId,
           quantity: newQty,
           updated_at: new Date().toISOString(),
@@ -224,11 +229,16 @@ export function useRemoveCartItem() {
  */
 export function useMergeGuestCart() {
   const queryClient = useQueryClient();
+  const { data: session } = useAuthSession();
 
   return useMutation({
     mutationFn: async () => {
       const guestItems = getGuestCart();
       if (!guestItems.length) return;
+
+      if (!session?.user?.id) {
+        throw new Error("User not authenticated");
+      }
 
       for (const item of guestItems) {
         const { data: existing } = await supabase
@@ -241,6 +251,7 @@ export function useMergeGuestCart() {
 
         await supabase.from("cart_items").upsert(
           {
+            user_id: session.user.id,
             variant_id: item.variantId,
             quantity: mergedQty,
             updated_at: new Date().toISOString(),

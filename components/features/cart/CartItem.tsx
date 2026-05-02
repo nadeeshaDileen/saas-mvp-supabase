@@ -36,31 +36,83 @@ export function CartItem({ item }: CartItemProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2 py-4 border-b last:border-b-0">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '8px',
+      paddingTop: '16px',
+      paddingBottom: '16px',
+      borderBottom: '1px solid #e5e7eb',
+      minHeight: '120px'
+    }}>
       {isOutOfStock && (
-        <div className="rounded-md bg-destructive/10 px-3 py-1.5 text-xs font-medium text-destructive">
+        <div style={{
+          borderRadius: '6px',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          padding: '6px 12px',
+          fontSize: '12px',
+          fontWeight: 500,
+          color: '#dc2626'
+        }}>
           This item is out of stock and will be removed at checkout.
         </div>
       )}
-      <div className="flex gap-3">
+      <div style={{ display: 'flex', gap: '12px' }}>
         {/* Product image */}
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border bg-muted">
+        <div style={{
+          position: 'relative',
+          height: '80px',
+          width: '80px',
+          flexShrink: 0,
+          overflow: 'hidden',
+          borderRadius: '6px',
+          border: '1px solid #e5e7eb',
+          backgroundColor: '#f3f4f6'
+        }}>
           {firstImage ? (
-            <Image src={firstImage} alt={product?.name ?? "Product"} fill className="object-cover" />
+            <Image 
+              src={firstImage} 
+              alt={product?.name ?? "Product"} 
+              fill 
+              sizes="80px"
+              style={{ objectFit: 'cover' }}
+            />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs">
+            <div style={{
+              display: 'flex',
+              height: '100%',
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#9ca3af',
+              fontSize: '12px'
+            }}>
               No image
             </div>
           )}
         </div>
 
         {/* Details */}
-        <div className="flex flex-1 flex-col gap-1 min-w-0">
-          <p className="truncate text-sm font-medium">{product?.name ?? "Unknown product"}</p>
-          <p className="text-xs text-muted-foreground">
+        <div style={{
+          display: 'flex',
+          flex: 1,
+          flexDirection: 'column',
+          gap: '4px',
+          minWidth: 0
+        }}>
+          <p style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            fontSize: '14px',
+            fontWeight: 500
+          }}>
+            {product?.name ?? "Unknown product"}
+          </p>
+          <p style={{ fontSize: '12px', color: '#6b7280' }}>
             {variant?.size} · {variant?.color}
           </p>
-          <p className="text-sm font-semibold">${lineTotal.toFixed(2)}</p>
+          <p style={{ fontSize: '14px', fontWeight: 600 }}>${lineTotal.toFixed(2)}</p>
         </div>
 
         {/* Remove */}
@@ -77,7 +129,12 @@ export function CartItem({ item }: CartItemProps) {
       </div>
 
       {/* Quantity stepper */}
-      <div className="flex items-center gap-2 self-end">
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        alignSelf: 'flex-end'
+      }}>
         <Button
           variant="outline"
           size="icon"
@@ -88,7 +145,14 @@ export function CartItem({ item }: CartItemProps) {
         >
           <Minus className="h-3 w-3" />
         </Button>
-        <span className="w-6 text-center text-sm tabular-nums">{item.quantity}</span>
+        <span style={{
+          width: '24px',
+          textAlign: 'center',
+          fontSize: '14px',
+          fontVariantNumeric: 'tabular-nums'
+        }}>
+          {item.quantity}
+        </span>
         <Button
           variant="outline"
           size="icon"
