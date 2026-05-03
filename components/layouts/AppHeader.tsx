@@ -40,35 +40,33 @@ export function AppHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background">
+      <div className="container mx-auto flex h-14 items-center justify-between px-6">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold tracking-tight">
-          Falcky
+        <Link href="/" className="text-xl font-bold tracking-tighter">
+          FALCKY
         </Link>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        {/* Center Navigation */}
+        <nav className="hidden md:flex items-center gap-8">
+          <Link
+            href="/"
+            className="text-sm font-medium tracking-wide uppercase hover:opacity-60 transition-opacity"
+          >
+            Home
+          </Link>
           <Link
             href="/shop"
-            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm font-medium tracking-wide uppercase hover:opacity-60 transition-opacity"
           >
-            Shop
+            Collections
           </Link>
           {isStoreOwner && (
             <Link
               href="/dashboard"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium tracking-wide uppercase hover:opacity-60 transition-opacity"
             >
               Dashboard
-            </Link>
-          )}
-          {isAuthenticated && (
-            <Link
-              href="/orders"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              My Orders
             </Link>
           )}
         </nav>
@@ -82,12 +80,10 @@ export function AppHeader() {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-                  <Avatar className="h-9 w-9">
-                    <AvatarFallback className="text-xs">
-                      {profile?.fullName ? getInitials(profile.fullName) : <User className="h-4 w-4" />}
-                    </AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" className="relative h-9 w-9 rounded-full p-0">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background">
+                    <User className="h-4 w-4" />
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -127,7 +123,7 @@ export function AppHeader() {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  className="cursor-pointer text-red-600 focus:text-red-600"
+                  className="cursor-pointer"
                   onClick={handleSignOut}
                   disabled={isSigningOut}
                 >
@@ -138,10 +134,10 @@ export function AppHeader() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild className="text-sm">
                 <Link href="/auth/login">Sign in</Link>
               </Button>
-              <Button size="sm" asChild>
+              <Button size="sm" asChild className="text-sm">
                 <Link href="/auth/signup">Sign up</Link>
               </Button>
             </div>
