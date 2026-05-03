@@ -61,9 +61,15 @@ export default function OrderDetailPage({ params }: PageProps) {
       {/* Order meta */}
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border p-4 space-y-2">
-          <h2 className="font-medium">Customer</h2>
-          <p className="text-sm">{order.customerEmail}</p>
-          <div className="flex items-center gap-2">
+          <h2 className="font-medium">Customer Information</h2>
+          <div className="space-y-1">
+            <p className="text-sm font-medium">{order.customerName || "N/A"}</p>
+            <p className="text-sm">{order.customerEmail}</p>
+            {order.customerPhone && (
+              <p className="text-sm">{order.customerPhone}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-2 pt-2">
             <span className="text-muted-foreground text-sm">Status:</span>
             <Badge variant={STATUS_VARIANT[order.status] ?? "secondary"}>{order.status}</Badge>
           </div>
@@ -78,16 +84,10 @@ export default function OrderDetailPage({ params }: PageProps) {
         </div>
 
         <div className="rounded-lg border p-4 space-y-2">
-          <h2 className="font-medium">Payment</h2>
-          <p className="text-muted-foreground font-mono text-xs break-all">
-            {order.stripePaymentIntent}
-          </p>
-          <p className="text-sm font-medium">
-            Total: ${(order.totalAmount / 100).toFixed(2)}
-          </p>
-          {addr && (
+          <h2 className="font-medium">Shipping Address</h2>
+          {addr ? (
             <div className="text-sm space-y-0.5">
-              <h3 className="font-medium mt-2">Shipping Address</h3>
+              <p className="font-medium">{order.customerName || "N/A"}</p>
               <p>{addr.line1}</p>
               {addr.line2 && <p>{addr.line2}</p>}
               <p>
@@ -95,7 +95,19 @@ export default function OrderDetailPage({ params }: PageProps) {
               </p>
               <p>{addr.country}</p>
             </div>
+          ) : (
+            <p className="text-muted-foreground text-sm">No shipping address provided</p>
           )}
+          
+          <div className="border-t pt-2 mt-2">
+            <h3 className="text-sm font-medium mb-1">Payment</h3>
+            <p className="text-muted-foreground font-mono text-xs break-all">
+              {order.stripePaymentIntent}
+            </p>
+            <p className="text-sm font-medium mt-1">
+              Total: ${(order.totalAmount / 100).toFixed(2)}
+            </p>
+          </div>
         </div>
       </div>
 

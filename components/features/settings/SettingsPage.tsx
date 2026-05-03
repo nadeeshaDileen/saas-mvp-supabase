@@ -30,7 +30,7 @@ export function SettingsPage() {
     if (!session?.user?.id) return;
     try {
       await updateProfile({ userId: session.user.id, input: { fullName, bio } });
-      toast.success("Profile updated");
+      toast.success("Settings updated");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Update failed");
     }
@@ -45,17 +45,23 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Settings</h1>
+    <div className="max-w-2xl space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold">Store Settings</h1>
+        <p className="text-muted-foreground text-sm mt-1">
+          Manage your store information and preferences
+        </p>
+      </div>
+      
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>Update your personal information</CardDescription>
+          <CardTitle>Store Owner Profile</CardTitle>
+          <CardDescription>Your public store owner information</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="fullName">Full name</Label>
+              <Label htmlFor="fullName">Store Owner Name</Label>
               <Input
                 id="fullName"
                 value={fullName}
@@ -64,18 +70,30 @@ export function SettingsPage() {
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="bio">Bio</Label>
+              <Label htmlFor="bio">Store Description</Label>
               <Input
                 id="bio"
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                placeholder="Tell us about yourself"
+                placeholder="Tell customers about your store"
               />
             </div>
             <Button type="submit" disabled={isPending}>
-              {isPending ? <LoadingSpinner size="sm" /> : "Save changes"}
+              {isPending ? <LoadingSpinner size="sm" /> : "Save Changes"}
             </Button>
           </form>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Store Information</CardTitle>
+          <CardDescription>Business details and contact information</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            Additional store settings coming soon...
+          </p>
         </CardContent>
       </Card>
     </div>

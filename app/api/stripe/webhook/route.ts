@@ -34,6 +34,18 @@ export async function POST(req: NextRequest) {
     const amountTotal = pi.amount / 100; // convert cents → dollars
     const userId = pi.metadata?.userId;
     const customerEmail = pi.metadata?.customerEmail ?? "";
+    const customerName = pi.metadata?.customerName ?? "";
+    const customerPhone = pi.metadata?.customerPhone ?? "";
+    
+    // Parse shipping address from metadata
+    let shippingAddress = null;
+    if (pi.metadata?.shippingAddress) {
+      try {
+        shippingAddress = JSON.parse(pi.metadata.shippingAddress);
+      } catch (e) {
+        console.error("Failed to parse shipping address", e);
+      }
+    }
 
     if (!userId) {
       console.error("Webhook: payment_intent.succeeded missing userId in metadata", paymentIntentId);
@@ -76,7 +88,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true });
     }
 
-    // Create order record
+    // Create order record with shipping info
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
@@ -85,6 +97,9 @@ export async function POST(req: NextRequest) {
         total_amount: amountTotal,
         stripe_payment_intent: paymentIntentId,
         customer_email: customerEmail,
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        shipping_address: shippingAddress,
         status_updated_at: new Date().toISOString(),
       })
       .select("id")

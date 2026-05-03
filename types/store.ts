@@ -79,6 +79,8 @@ export interface Order {
   totalAmount: number;
   stripePaymentIntent: string;
   customerEmail: string;
+  customerName: string | null;
+  customerPhone: string | null;
   shippingAddress: ShippingAddress | null;
   statusUpdatedAt: string | null;
   createdAt: string;

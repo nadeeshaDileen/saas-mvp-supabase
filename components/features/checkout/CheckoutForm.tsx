@@ -9,6 +9,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
+import type { ShippingAddress } from "@/types/user";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -61,7 +62,15 @@ function PaymentForm() {
 
 // ─── Outer wrapper — fetches clientSecret, mounts Elements ───────────────────
 
-export function CheckoutForm() {
+interface CheckoutFormProps {
+  shippingData: {
+    fullName: string;
+    phone: string;
+    shippingAddress: ShippingAddress;
+  };
+}
+
+export function CheckoutForm({ shippingData }: CheckoutFormProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [outOfStockItems, setOutOfStockItems] = useState<string[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -72,6 +81,8 @@ export function CheckoutForm() {
       try {
         const res = await fetch("/api/stripe/create-payment-intent", {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ shippingData }),
         });
 
         if (res.status === 409) {
@@ -96,7 +107,7 @@ export function CheckoutForm() {
     }
 
     createIntent();
-  }, []);
+  }, [shippingData]);
 
   if (isLoading) {
     return (

@@ -17,14 +17,19 @@ export function useUpdateProfile() {
       userId: string;
       input: UpdateProfileInput;
     }) => {
+      const updateData: Record<string, unknown> = {
+        updated_at: new Date().toISOString(),
+      };
+      
+      if (input.fullName !== undefined) updateData.full_name = input.fullName;
+      if (input.avatarUrl !== undefined) updateData.avatar_url = input.avatarUrl;
+      if (input.bio !== undefined) updateData.bio = input.bio;
+      if (input.phone !== undefined) updateData.phone = input.phone;
+      if (input.shippingAddress !== undefined) updateData.shipping_address = input.shippingAddress;
+
       const { data, error } = await supabase
         .from("profiles")
-        .update({
-          full_name: input.fullName,
-          avatar_url: input.avatarUrl,
-          bio: input.bio,
-          updated_at: new Date().toISOString(),
-        })
+        .update(updateData)
         .eq("user_id", userId)
         .select()
         .single();

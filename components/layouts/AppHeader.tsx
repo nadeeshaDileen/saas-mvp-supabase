@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ShoppingCart, User, LogOut, LayoutDashboard, Package } from "lucide-react";
+import { ShoppingCart, User, LogOut, LayoutDashboard, Package, UserCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -113,6 +113,12 @@ export function AppHeader() {
                     <DropdownMenuSeparator />
                   </>
                 )}
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/orders" className="cursor-pointer">
                     <Package className="mr-2 h-4 w-4" />

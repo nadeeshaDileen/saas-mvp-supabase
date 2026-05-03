@@ -15,6 +15,8 @@ function mapOrder(row: Record<string, unknown>): Order {
     totalAmount: row.total_amount as number,
     stripePaymentIntent: row.stripe_payment_intent as string,
     customerEmail: row.customer_email as string,
+    customerName: (row.customer_name as string) ?? null,
+    customerPhone: (row.customer_phone as string) ?? null,
     shippingAddress: (row.shipping_address as Order["shippingAddress"]) ?? null,
     statusUpdatedAt: (row.status_updated_at as string) ?? null,
     createdAt: row.created_at as string,

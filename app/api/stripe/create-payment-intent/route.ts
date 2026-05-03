@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { getSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2025-05-28.basil",
 });
 
-export async function POST() {
+export async function POST(req: NextRequest) {
   const supabase = await getSupabaseServerClient();
 
   // Authenticate user
@@ -16,6 +16,25 @@ export async function POST() {
 
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Parse shipping data from request body
+  const body = await req.json();
+  const shippingData = body.shippingData as {
+    fullName: string;
+    phone: string;
+    shippingAddress: {
+      line1: string;
+      line2?: string;
+      city: string;
+      state: string;
+      postalCode: string;
+      country: string;
+    };
+  } | undefined;
+
+  if (!shippingData) {
+    return NextResponse.json({ error: "Shipping information required" }, { status: 400 });
   }
 
   // Fetch cart items with variant and product info
@@ -87,13 +106,16 @@ export async function POST() {
     return NextResponse.json({ error: "Invalid cart total" }, { status: 400 });
   }
 
-  // Create Stripe PaymentIntent
+  // Create Stripe PaymentIntent with shipping metadata
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amountInCents,
     currency: "usd",
     metadata: {
       userId: user.id,
       customerEmail: user.email ?? "",
+      customerName: shippingData.fullName,
+      customerPhone: shippingData.phone,
+      shippingAddress: JSON.stringify(shippingData.shippingAddress),
     },
   });
 

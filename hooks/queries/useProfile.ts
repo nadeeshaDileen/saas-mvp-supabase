@@ -13,6 +13,8 @@ function mapProfile(row: Record<string, unknown>): Profile {
     fullName: row.full_name as string | null,
     avatarUrl: row.avatar_url as string | null,
     bio: row.bio as string | null,
+    phone: row.phone as string | null,
+    shippingAddress: row.shipping_address as Profile["shippingAddress"],
     role: row.role as "customer" | "store_owner",
     createdAt: row.created_at as string,
     updatedAt: row.updated_at as string,
