@@ -4,6 +4,7 @@ import "./globals.css";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { Toaster } from "sonner";
 import { AppHeader } from "@/components/layouts/AppHeader";
+import { ChatWidget } from "@/components/features/chat/ChatWidget";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <QueryProvider>
           <AppHeader />
           {children}
+          <ChatWidget />
           <Toaster richColors position="top-right" />
         </QueryProvider>
       </body>

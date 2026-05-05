@@ -50,6 +50,9 @@ next-env.d.ts
 # Supabase
 .supabase/
 
+# Kiro (AI assistant workspace files - keep local only)
+.kiro/
+
 # OS
 Thumbs.db
 
@@ -70,3 +73,7 @@ logs
 # Temporary files
 tmp/
 temp/
+
+# Implementation documentation
+*_IMPLEMENTATION.md
+*_SUMMARY.md
